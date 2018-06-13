@@ -2,10 +2,9 @@ package com.example.solarsystem
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_planet_detail.*
 
 class PlanetDetailActivity : AppCompatActivity() {
 
@@ -13,10 +12,8 @@ class PlanetDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planet_detail)
 
-        val toolbar = findViewById<Toolbar>(R.id.detail_toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(detail_toolbar)
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener { view ->
 
             view.showSnackbar("My message")
