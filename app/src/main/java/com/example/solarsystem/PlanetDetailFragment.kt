@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.example.solarsystem.dummy.Planet
 import com.example.solarsystem.dummy.PlanetsDataProvider
 import com.example.solarsystem.dummy.composition
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.support.v4.browse
+import org.jetbrains.anko.support.v4.ctx
 
 const val ARG_ITEM_ID = "item_id"
 
@@ -19,27 +21,16 @@ const val GAS_GIANT = "Gas Giant"
 
 class PlanetDetailFragment : Fragment() {
 
-    private lateinit var planetDescription: TextView
-    private lateinit var planetComposition: TextView
-    private lateinit var planetMoons: TextView
-    private lateinit var planetOrbit: TextView
-
     private var planet: Planet? = null
+
+    //Create something lazily means to only create it the first time it is accessed.
+    private val ui by lazy { PlanetDetailUI() }
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.planet_detail, container, false)
-
-        with(view) {
-            planetDescription = findViewById(R.id.planet_description)
-            planetComposition = findViewById(R.id.planet_composition)
-            planetMoons = findViewById(R.id.planet_moons)
-            planetOrbit = findViewById(R.id.planet_orbit)
-        }
-
         if (arguments.containsKey(ARG_ITEM_ID)) {
             planet = PlanetsDataProvider.ITEM_MAP[arguments.getString(ARG_ITEM_ID)]
             planet?.let {
@@ -52,17 +43,17 @@ class PlanetDetailFragment : Fragment() {
             }
         }
 
-        return view
+        return ui.createView(AnkoContext.create(ctx,this))
     }
 
     override fun onResume() {
         super.onResume()
 
         planet?.let {
-            planetDescription.text = it.description
-            planetComposition.text = it.composition
-            planetMoons.text = getString(R.string.num_known_moons, it.knownMoons)
-            planetOrbit.text = getString(R.string.orbital_period_years, it.orbitalPeriod)
+            ui.planetDescription.text = it.description
+            ui.planetComposition.text = it.composition
+            ui.planetMoons.text = getString(R.string.num_known_moons, it.knownMoons)
+            ui.planetOrbit.text = getString(R.string.orbital_period_years, it.orbitalPeriod)
         }
     }
 
@@ -72,6 +63,11 @@ class PlanetDetailFragment : Fragment() {
         planet?.let {
             arguments.putString(ARG_ITEM_ID, it.id)
         }
+    }
+
+    fun goToSpaceWebsite() {
+        browse("https://www.space.com")
+
     }
 
 }

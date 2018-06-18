@@ -3,29 +3,40 @@ package com.example.solarsystem
 import android.view.View
 import android.widget.TextView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.jetbrains.anko.sdk21.coroutines.onLongClick
 
 /**
  * Created by hend on 6/15/18.
  */
 
 class PlanetDetailUI : AnkoComponent<PlanetDetailFragment> {
+
+    //lateinit means they won't be available at the time of component creation
+    lateinit var planetDescription: TextView
+    lateinit var planetComposition: TextView
+    lateinit var planetMoons: TextView
+    lateinit var planetOrbit: TextView
+
     override fun createView(ui: AnkoContext<PlanetDetailFragment>): View {
         return with(ui) {
             //View are wrap_content by default
             val container = verticalLayout {
                 lparams(matchParent)
-                textView {
+                planetDescription = textView {
                     setLineSpacing(8f, 1f)
+                    onClick { toast("Hey world from Anko!") }
                 }.lparams {
                     topMargin = dip(16)
                 }
-                textView {
+                planetComposition = textView {
                     setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_landscape, 0, 0, 0)
+                    onLongClick { owner.goToSpaceWebsite() }
                 }
-                textView {
+                planetMoons = textView {
                     setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_brightness, 0, 0, 0)
                 }
-                textView {
+                planetOrbit = textView {
                     setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_loop, 0, 0, 0)
                 }
             }
