@@ -12,7 +12,11 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_planet_list.*
 import kotlinx.android.synthetic.main.planet_list.*
 import kotlinx.android.synthetic.main.planet_list_content.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.coroutines.experimental.bg
+import org.jetbrains.anko.info
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.warn
 
@@ -24,11 +28,26 @@ class PlanetListActivity : AppCompatActivity(), AnkoLogger {
 
         setSupportActionBar(toolbar)
 
-        setupRecyclerView(planet_list)
+        getPlanetsTimeConsuming()
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = PlanetsAdapter(PlanetsDataProvider.ITEMS)
+//    private fun setupRecyclerView(recyclerView: RecyclerView) {
+//
+//        recyclerView.adapter = PlanetsAdapter(PlanetsDataProvider.ITEMS)
+//    }
+
+    private fun getPlanetsTimeConsuming() {
+        launch(UI) {
+            info("starting launch on ${Thread.currentThread().name}")
+
+            val planets = bg {
+                info("starting launch on ${Thread.currentThread().name}")
+                Thread.sleep(3_000L)
+               PlanetsDataProvider.ITEMS
+            }
+
+            planet_list.adapter = PlanetsAdapter(planets.await())
+        }
     }
 
     inner class PlanetsAdapter internal constructor(
