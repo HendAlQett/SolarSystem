@@ -33,7 +33,7 @@ class PlanetListActivity : AppCompatActivity(), AnkoLogger {
 
     private fun getPlanetsTimeConsuming() {
         launch(UI) {
-            info("starting launch on ${Thread.currentThread().name}") //This is main thread
+            info("starting launch on ${Thread.currentThread().name}") //This is main thread UI
 
             val planets = bg { //This is a background thread
                 info("starting launch on ${Thread.currentThread().name}")
@@ -42,7 +42,7 @@ class PlanetListActivity : AppCompatActivity(), AnkoLogger {
             }
 
             planetsAdapter = PlanetsAdapter(planets.await())
-            planet_list.adapter = planetsAdapter;
+            planet_list.adapter = planetsAdapter
         }
     }
 
